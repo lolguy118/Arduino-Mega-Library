@@ -7,8 +7,9 @@ class RegisterBit {
         explicit RegisterBit(Register8* argRegister, uint8_t argBitPosition);
         void setBit();
         void clearBit();
+        void toggleBit();
         bool readBit() const;
     private:
-        Register8* mRegister;
+        Register8* const mRegister;
         uint8_t mBitPosition;
 };
