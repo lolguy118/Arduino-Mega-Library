@@ -16,7 +16,7 @@ public:
     {
         DIV_1,
         DIV_8,
-        DIV_32, //If passed into a timer that isn't timer 2, will be implemented to throw exception
+        DIV_32, // If passed into a timer that isn't timer 2, will be implemented to throw exception
         DIV_64,
         DIV_128,
         DIV_256,
@@ -30,8 +30,16 @@ public:
         FAST_PWM
     };
     Timer(UniversalTimerRegisters argUniversalTimerRegisters);
+    void setPrescalar(Prescaler argPrescalar);
+    void setMode(Mode argMode);
+    void start();
+    void stop();
 
 private:
+    void enableCTC();
+    void disableCTC();
+    void enablePWM();
+    void disablePWM();
     UniversalTimerRegisters mUniversalRegisters;
     Prescaler mPrescaler = Prescaler::DIV_1;
     Mode mMode = Mode::OFF;
