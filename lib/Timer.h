@@ -4,10 +4,10 @@
 
 struct UniversalTimerRegisters
 {
-    volatile Register8 *tccra;
-    volatile Register8 *tccrb;
-    volatile Register8 *timsk;
-    volatile Register8 *tifr;
+    Register8 *tccra;
+    Register8 *tccrb;
+    Register8 *timsk;
+    Register8 *tifr;
 };
 
 class Timer
