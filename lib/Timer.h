@@ -24,6 +24,7 @@ public:
     };
     enum class Mode
     {
+        OFF,
         NORMAL,
         CTC,
         FAST_PWM
@@ -33,4 +34,5 @@ public:
 private:
     UniversalTimerRegisters mUniversalRegisters;
     Prescaler mPrescaler = Prescaler::DIV_1;
+    Mode mMode = Mode::OFF;
 };
