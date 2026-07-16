@@ -1,42 +1,36 @@
+#pragma once
 #include <stdint.h>
 
 struct UniversalTimerRegisters
 {
-    volatile uint8_t* tccra;
-    volatile uint8_t* tccrb;
-    volatile uint8_t* timsk;
-    volatile uint8_t* tifr;
+    volatile uint8_t *tccra;
+    volatile uint8_t *tccrb;
+    volatile uint8_t *timsk;
+    volatile uint8_t *tifr;
 };
 
 class Timer
 {
 public:
-    enum class Prescaler // will be overloaded/reimplemented in dedicated Timer2 class to include DIV_32 and other uniqueness
+    enum class Prescaler
     {
         DIV_1,
         DIV_8,
+        DIV_32, //If passed into a timer that isn't timer 2, will be implemented to throw exception
         DIV_64,
+        DIV_128,
         DIV_256,
         DIV_1024
     };
     enum class Mode
     {
-        OFF,
         NORMAL,
         CTC,
         FAST_PWM
     };
-    explicit Timer(UniversalTimerRegisters argUniversalTimerRegisters);
-    void start();
-    void stop();
-    void setMode(Mode argMode); // calls the appropriate enable and disable functions
-    void setPrescalar(Prescaler argPrescaler);
+    Timer(UniversalTimerRegisters argUniversalTimerRegisters);
 
 private:
-    UniversalTimerRegisters mUniversalTimerRegisters;
-    Prescaler mPrescalar = Prescaler::DIV_1;
-    void enableCTC();
-    void disableCTC();
-    void enablePWM();
-    void disablePWM();
+    UniversalTimerRegisters mUniversalRegisters;
+    Prescaler mPrescaler = Prescaler::DIV_1;
 };
