@@ -1,12 +1,13 @@
 #pragma once
 #include <stdint.h>
+#include "Register8.h"
 
 struct UniversalTimerRegisters
 {
-    volatile uint8_t *tccra;
-    volatile uint8_t *tccrb;
-    volatile uint8_t *timsk;
-    volatile uint8_t *tifr;
+    volatile Register8 *tccra;
+    volatile Register8 *tccrb;
+    volatile Register8 *timsk;
+    volatile Register8 *tifr;
 };
 
 class Timer
