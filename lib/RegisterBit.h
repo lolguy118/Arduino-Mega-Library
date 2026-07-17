@@ -5,7 +5,7 @@
 class RegisterBit
 {
 public:
-    explicit RegisterBit(RegisterBit *argRegister, uint8_t argBitPosition);
+    explicit RegisterBit(Register8 *argRegister, uint8_t argBitPosition);
     void setBit();
     void clearBit();
     void toggleBit();
@@ -14,6 +14,6 @@ public:
     RegisterBit &operator=(const RegisterBit &) = delete;
 
 private:
-    RegisterBit *const mRegister;
+    Register8 *const mRegister;
     uint8_t mBitPosition;
 };
