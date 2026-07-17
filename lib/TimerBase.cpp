@@ -3,12 +3,14 @@
 
 TimerBase::TimerBase(UniversalTimerRegisters argUniversalTimerRegisters) : mUniversalRegisters(argUniversalTimerRegisters) {}
 
-void TimerBase::setPrescaler(Prescaler argPrescalar) {
+void TimerBase::setPrescaler(Prescaler argPrescalar)
+{
     mPrescaler = argPrescalar;
     updatePrescaler();
 }
 
-void TimerBase::setMode(Mode argMode) {
+void TimerBase::setMode(Mode argMode)
+{
     if (mMode == argMode)
     {
         return;
@@ -33,19 +35,22 @@ void TimerBase::setMode(Mode argMode) {
     mMode = argMode;
 }
 
-void TimerBase::start() {
+void TimerBase::start()
+{
     updatePrescaler();
     mIsOn = true;
 }
 
-void TimerBase::stop() {
+void TimerBase::stop()
+{
     uint8_t temp = mUniversalRegisters.tccrb.read();
     temp &= ~0b111;
     mUniversalRegisters.tccrb.write(temp);
     mIsOn = false;
 }
 
-void TimerBase::updatePrescaler() {
+void TimerBase::updatePrescaler()
+{
     uint8_t temp = mUniversalRegisters.tccrb.read();
     temp &= ~0b111;
     switch (mPrescaler)

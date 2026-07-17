@@ -4,10 +4,10 @@
 
 struct UniversalTimerRegisters
 {
-    Register8& tccra;
-    Register8& tccrb;
-    Register8& timsk;
-    Register8& tifr;
+    Register8 &tccra;
+    Register8 &tccrb;
+    Register8 &timsk;
+    Register8 &tifr;
 };
 
 class TimerBase
