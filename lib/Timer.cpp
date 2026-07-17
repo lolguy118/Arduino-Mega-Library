@@ -4,10 +4,12 @@
 Timer::Timer(UniversalTimerRegisters argUniversalTimerRegisters) : mUniversalRegisters(argUniversalTimerRegisters) {}
 
 void Timer::start() {
+    uint8_t temp;
     switch (mPrescaler)
     {
     case Prescaler::DIV_1:
-        /* code */
+        temp = Timer::mUniversalRegisters.tccrb->read();
+        
         break;
     
     default:
