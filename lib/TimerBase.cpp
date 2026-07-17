@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "Timer.h"
+#include "TimerBase.h"
 
 TimerBase::TimerBase(UniversalTimerRegisters argUniversalTimerRegisters) : mUniversalRegisters(argUniversalTimerRegisters) {}
 
