@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "Timer.h"
+#include "TimerBase.h"
 
 struct Timer16Registers
 {
@@ -14,7 +14,7 @@ struct Timer16Registers
     volatile uint16_t *icr;
 };
 
-class Timer16 : public Timer
+class Timer16 : public TimerBase
 {
 public:
     explicit Timer16(UniversalTimerRegisters argUniversalTimerRegisters, Timer16Registers argTimer16Registers);

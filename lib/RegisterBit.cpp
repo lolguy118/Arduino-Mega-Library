@@ -1,7 +1,7 @@
 #include "RegisterBit.h"
 #include <stdint.h>
 
-explicit RegisterBit::RegisterBit(Register8 *argRegister, uint8_t argBitPosition) : mRegister(argRegister), mBitPosition(argBitPosition) {}
+RegisterBit::RegisterBit(Register8 *argRegister, uint8_t argBitPosition) : mRegister(argRegister), mBitPosition(argBitPosition) {}
 
 void RegisterBit::setBit()
 {

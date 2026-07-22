@@ -22,8 +22,8 @@ void TimerBase::setMode(Mode argMode)
         disablePWM();
         break;
     case Mode::CTC:
-        enableCTC();
         disablePWM();
+        enableCTC();
         break;
     case Mode::FAST_PWM:
         disableCTC();
