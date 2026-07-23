@@ -17,7 +17,6 @@ public:
     {
         DIV_1,
         DIV_8,
-        DIV_32, // If passed into a timer that isn't timer 2, will be implemented to throw exception
         DIV_64,
         DIV_128,
         DIV_256,
