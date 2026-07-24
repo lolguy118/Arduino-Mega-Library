@@ -37,20 +37,27 @@ public:
     };
     Timer8(UniversalTimerRegisters argUniversalTimerRegisters, Timer8SpecificRegisters argTimer8SpecificRegisters);
     void setPrescaler(Prescaler argPrescalar);
+    Prescaler getPrescaler();
     void setMode(Mode argMode);
+    Mode getMode();
     void setCompareValueA(int argCompareValue);
+    int getCompareValueA();
     void setCompareValueB(int argCompareValue);
+    void getCompareValueB();
+    void setCompareATop(bool argCompareAIsTop);
     void start();
     void stop();
+    bool getIsOn();
 
 private:
     void writePrescaler(); 
     void writeCompareValueA();
     void writeCompareValueB();
     void enableCTC();
-    void disableCTC();
-    void enablePWM();
-    void disablePWM();
+    void enableFastPWM();
+    void enableFastPWMCompareATop();
+    void enablePhaseCorrectPWM();
+    void enablePhaseCorrectPWMCompareATop();
     UniversalTimerRegisters mUniversalRegisters;
     Timer8SpecificRegisters mTimer8SpecificRegisters;
     Prescaler mPrescaler = Prescaler::DIV_1;
@@ -58,4 +65,5 @@ private:
     bool mIsOn = false;
     int mCompareValueA = 255;
     int mCompareValueB = 255;
+    bool mCompareAIsTop = false;
 };

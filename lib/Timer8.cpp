@@ -1,14 +1,20 @@
 #include "Timer8.h"
 #include <stdint.h>
+#include <assert.h>
 
 Timer8::Timer8(UniversalTimerRegisters argUniversalTimerRegisters, Timer8SpecificRegisters argTimer8Registers) : mUniversalRegisters(argUniversalTimerRegisters), mTimer8SpecificRegisters(argTimer8Registers) {}
 
-void Timer8::setPrescaler(Prescaler argPrescalar) {
+void Timer8::setPrescaler(Prescaler argPrescalar)
+{
     mPrescaler = argPrescalar;
-    writePrescaler();
+    if (mIsOn)
+    {
+        writePrescaler();
+    }
 }
 
-void Timer8::writePrescaler() {
+void Timer8::writePrescaler()
+{
     uint8_t temp = mUniversalRegisters.tccrb.read();
     temp &= ~(0b00000111);
     switch (mPrescaler)
@@ -29,43 +35,135 @@ void Timer8::writePrescaler() {
         temp |= 0b00000111;
         break;
     default:
-        // Handle unknown prescaler value
+        assert(mPrescaler == Prescaler::DIV_1 && mPrescaler == Prescaler::DIV_8 && mPrescaler == Prescaler::DIV_64 && mPrescaler == Prescaler::DIV_256 && mPrescaler == Prescaler::DIV_1024);
         break;
     }
     mUniversalRegisters.tccrb.write(temp);
 }
 
-void Timer8::setMode(Mode argMode) {
+Timer8::Prescaler Timer8::getPrescaler() {
+    return mPrescaler;
+}
+
+void Timer8::setMode(Mode argMode)
+{
     mMode = argMode;
     switch (mMode)
     {
     case Mode::NORMAL:
-        disableCTC();
-        disablePWM();
+        //disableCTC();
+        //disablePWM();
         break;
     case Mode::CTC:
         enableCTC();
-        disablePWM();
         break;
     case Mode::FAST_PWM:
-        enablePWM();
+        mCompareAIsTop ? enableFastPWMCompareATop() : enableFastPWM();
         break;
     case Mode::PHASE_CORRECT_PWM:
-        enablePWM();
+        mCompareAIsTop ? enablePhaseCorrectPWMCompareATop() : enablePhaseCorrectPWM();
         break;
     default:
-        // Handle unknown mode
+        assert(mMode == Mode::NORMAL && mMode == Mode::CTC && mMode == Mode::FAST_PWM && mMode == Mode::PHASE_CORRECT_PWM);
         break;
     }
 }
 
-void Timer8::setCompareValueA(int argCompareValue) {
+void Timer8::setCompareValueA(int argCompareValue)
+{
     mCompareValueA = argCompareValue;
     writeCompareValueA();
 }
 
-void Timer8::setCompareValueB(int argCompareValue) {
+void Timer8::setCompareValueB(int argCompareValue)
+{
     mCompareValueB = argCompareValue;
     writeCompareValueB();
 }
 
+void Timer8::writeCompareValueA()
+{
+    mTimer8SpecificRegisters.ocra->write(mCompareValueA);
+}
+
+void Timer8::writeCompareValueB()
+{
+    mTimer8SpecificRegisters.ocrb->write(mCompareValueB);
+}
+
+void Timer8::start()
+{
+    mIsOn = true;
+    writePrescaler();
+}
+
+void Timer8::stop()
+{
+    uint8_t temp = mUniversalRegisters.tccrb.read();
+    temp &= ~(0b00000111);
+    mUniversalRegisters.tccrb.write(temp);
+}
+
+void Timer8::enableCTC()
+{
+    uint8_t temp = mUniversalRegisters.tccra.read();
+    temp &= ~(0b00000011);
+    temp |= (1 << 1);
+    mUniversalRegisters.tccra.write(temp);
+    temp = mUniversalRegisters.tccrb.read();
+    temp &= ~(1 << 3);
+    mUniversalRegisters.tccrb.write(temp);
+}
+
+void Timer8::enableFastPWM() {
+    uint8_t temp = mUniversalRegisters.tccra.read();
+    temp |= (0b00000011);
+    mUniversalRegisters.tccra.write(temp);
+    temp = mUniversalRegisters.tccrb.read();
+    temp &= ~(1 << 3);
+    mUniversalRegisters.tccrb.write(temp);
+}
+
+void Timer8::enableFastPWMCompareATop() {
+    uint8_t temp = mUniversalRegisters.tccra.read();
+    temp |= (0b00000011);
+    mUniversalRegisters.tccra.write(temp);
+    temp = mUniversalRegisters.tccrb.read();
+    temp |= (1 << 3);
+    mUniversalRegisters.tccrb.write(temp);
+}
+
+void Timer8::enablePhaseCorrectPWM() {
+    uint8_t temp = mUniversalRegisters.tccra.read();
+    temp &= ~(0b00000011);
+    temp |= (1 << 0);
+    mUniversalRegisters.tccra.write(temp);
+    temp = mUniversalRegisters.tccrb.read();
+    temp &= ~(1 << 3);
+    mUniversalRegisters.tccrb.write(temp);
+}
+
+void Timer8::enablePhaseCorrectPWMCompareATop() {
+    uint8_t temp = mUniversalRegisters.tccra.read();
+    temp &= ~(0b00000011);
+    temp |= (1 << 0);
+    mUniversalRegisters.tccra.write(temp);
+    temp = mUniversalRegisters.tccrb.read();
+    temp |= (1 << 3);
+    mUniversalRegisters.tccrb.write(temp);
+}
+
+void Timer8::setCompareATop(bool argCompareAIsTop) {
+    mCompareAIsTop = argCompareAIsTop;
+    switch (mMode)
+    {
+    case Mode::FAST_PWM:
+        argCompareAIsTop ? enableFastPWMCompareATop() : enableFastPWM();
+        break;
+    case Mode::PHASE_CORRECT_PWM:
+        argCompareAIsTop ? enablePhaseCorrectPWMCompareATop() : enablePhaseCorrectPWM();
+        break;
+    default:
+        break;
+    }
+}
