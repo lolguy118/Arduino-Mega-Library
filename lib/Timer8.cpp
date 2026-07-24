@@ -41,7 +41,8 @@ void Timer8::writePrescaler()
     mUniversalRegisters.tccrb.write(temp);
 }
 
-Timer8::Prescaler Timer8::getPrescaler() {
+Timer8::Prescaler Timer8::getPrescaler()
+{
     return mPrescaler;
 }
 
@@ -51,8 +52,8 @@ void Timer8::setMode(Mode argMode)
     switch (mMode)
     {
     case Mode::NORMAL:
-        //disableCTC();
-        //disablePWM();
+        // disableCTC();
+        // disablePWM();
         break;
     case Mode::CTC:
         enableCTC();
@@ -115,7 +116,8 @@ void Timer8::enableCTC()
     mUniversalRegisters.tccrb.write(temp);
 }
 
-void Timer8::enableFastPWM() {
+void Timer8::enableFastPWM()
+{
     uint8_t temp = mUniversalRegisters.tccra.read();
     temp |= (0b00000011);
     mUniversalRegisters.tccra.write(temp);
@@ -124,7 +126,8 @@ void Timer8::enableFastPWM() {
     mUniversalRegisters.tccrb.write(temp);
 }
 
-void Timer8::enableFastPWMCompareATop() {
+void Timer8::enableFastPWMCompareATop()
+{
     uint8_t temp = mUniversalRegisters.tccra.read();
     temp |= (0b00000011);
     mUniversalRegisters.tccra.write(temp);
@@ -133,7 +136,8 @@ void Timer8::enableFastPWMCompareATop() {
     mUniversalRegisters.tccrb.write(temp);
 }
 
-void Timer8::enablePhaseCorrectPWM() {
+void Timer8::enablePhaseCorrectPWM()
+{
     uint8_t temp = mUniversalRegisters.tccra.read();
     temp &= ~(0b00000011);
     temp |= (1 << 0);
@@ -143,7 +147,8 @@ void Timer8::enablePhaseCorrectPWM() {
     mUniversalRegisters.tccrb.write(temp);
 }
 
-void Timer8::enablePhaseCorrectPWMCompareATop() {
+void Timer8::enablePhaseCorrectPWMCompareATop()
+{
     uint8_t temp = mUniversalRegisters.tccra.read();
     temp &= ~(0b00000011);
     temp |= (1 << 0);
@@ -153,7 +158,8 @@ void Timer8::enablePhaseCorrectPWMCompareATop() {
     mUniversalRegisters.tccrb.write(temp);
 }
 
-void Timer8::setCompareATop(bool argCompareAIsTop) {
+void Timer8::setCompareATop(bool argCompareAIsTop)
+{
     mCompareAIsTop = argCompareAIsTop;
     switch (mMode)
     {

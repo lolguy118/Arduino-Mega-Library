@@ -50,7 +50,7 @@ public:
     bool getIsOn();
 
 private:
-    void writePrescaler(); 
+    void writePrescaler();
     void writeCompareValueA();
     void writeCompareValueB();
     void enableCTC();
