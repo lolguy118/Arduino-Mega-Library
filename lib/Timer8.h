@@ -33,13 +33,13 @@ public:
         NORMAL,
         CTC,
         FAST_PWM,
-        PHASE_CORRECT_PWM
+        FAST_PWM_COMPARE_A_TOP,
+        PHASE_CORRECT_PWM,
+        PHASE_CORRECT_PWM_COMPARE_A_TOP
     };
     Timer8(UniversalTimerRegisters argUniversalTimerRegisters, Timer8SpecificRegisters argTimer8SpecificRegisters);
     void setPrescaler(Prescaler argPrescalar);
-    Prescaler getPrescaler();
     void setMode(Mode argMode);
-    Mode getMode();
     void setCompareValueA(int argCompareValue);
     int getCompareValueA();
     void setCompareValueB(int argCompareValue);
@@ -47,7 +47,12 @@ public:
     void setCompareATop(bool argCompareAIsTop);
     void start();
     void stop();
-    bool getIsOn();
+    void enableChannelA();
+    void disableChannelA();
+    void setChannelADutyCycle();
+    void enableChannelB();
+    void disableChannelB();
+    void setChannelBDutyCycle();
 
 private:
     void writePrescaler();
@@ -65,5 +70,8 @@ private:
     bool mIsOn = false;
     int mCompareValueA = 255;
     int mCompareValueB = 255;
-    bool mCompareAIsTop = false;
+    bool mChannelAIsOn = false;
+    bool mChannelBIsOn = false;
+    uint8_t mChannelADutyCycle;
+    uint8_t mChannelBDutyCycle;
 };
